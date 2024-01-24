@@ -1,0 +1,23 @@
+CREATE DATABASE IF NOT EXISTS data;
+USE data;
+
+CREATE TABLE IF NOT EXISTS assign (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Intensity INT,
+    Likelihood INT,
+    Relevance INT,
+    Year INT,
+    Country VARCHAR(255),
+    Topics VARCHAR(255),
+    Region VARCHAR(255),
+    City VARCHAR(255),
+    Sector VARCHAR(255),
+    PEST VARCHAR(255),
+    Source VARCHAR(255),
+    SWOT VARCHAR(255)
+);
+
+LOAD DATA INFILE 'E/WORKFILES/Data.csv' INTO TABLE data
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
