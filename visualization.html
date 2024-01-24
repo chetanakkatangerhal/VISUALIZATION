@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+    <!-- Filters -->
+    <div class="form-row">
+        <!-- Add your filters here, e.g., end year filter -->
+        <div class="form-group col-md-3">
+            <label for="endYearFilter">End Year</label>
+            <select id="endYearFilter" class="form-control">
+                <option value="">All</option>
+                <!-- Populate options dynamically using JavaScript -->
+            </select>
+        </div>
+        <!-- Add other filters as needed -->
+    </div>
+
+    <!-- Visualization Container -->
+    <div id="chart-container"></div>
+</div>
+
+<script>
+// Function to fetch data from the PHP API based on filters
+function fetchData() {
+    var endYearFilter = document.getElementById("endYearFilter").value;
+
+    // Construct API URL with filters
+    var apiUrl = 'api.php?filter=end_year&value=' + endYearFilter;
+
+    // Fetch data using D3.js
+    d3.json(apiUrl, function(data) {
+        // Implement logic to create charts using the data
+        // Example: Create a bar chart based on intensity
+        var svg = d3.select("#chart-container").append("svg").attr("width", 400).attr("height", 200);
+        var bars = svg.selectAll("rect").data(data).enter().append("rect");
+        // Implement the rest of the bar chart logic
+    });
+}
+
+// Populate end year filter options dynamically
+function populateEndYearFilter() {
+    // Fetch unique end years from the data
+    d3.json('api.php?filter=end_year', function(data) {
+        var endYears = Array.from(new Set(data.map(d => d.Year)));
+        var select = d3.select("#endYearFilter");
+
+        // Append options to the filter
+        select.selectAll("option")
+            .data(endYears)
+            .enter()
+            .append("option")
+            .text(function(d) { return d; })
+            .attr("value", function(d) { return d; });
+    });
+}
+
+// Initial data fetch and filter population
+fetchData();
+populateEndYearFilter();
+
+// Attach event listeners to filters for dynamic updates
+document.getElementById("endYearFilter").addEventListener("change", fetchData);
+// Add event listeners for other filters as needed
+
+</script>
+
+</body>
+</html>
